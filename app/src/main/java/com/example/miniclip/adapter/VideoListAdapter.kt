@@ -37,7 +37,7 @@ class VideoListAdapter(
                         Glide.with(binding.profileIcon).load(profilePic) //加载用户头像, Glide执行网络请求
                             .circleCrop()
                             .apply( //这会将附加选项应用于 Glide 请求。在这里，它设置了一个占位符图像 (`R.drawable.icon_profile`)，当主图像加载或主图像加载失败时会显示该图像。
-                                RequestOptions().placeholder(R.drawable.icon_profile)
+                                RequestOptions().placeholder(R.drawable.icon_account_circle)
                             )
                             .into(binding.profileIcon)
 

@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.miniclip.adapter.ProfileVideoAdapter
@@ -23,6 +24,7 @@ import com.example.miniclip.model.UserModel
 import com.example.miniclip.model.VideoModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -202,8 +204,22 @@ class ProfileActivity : AppCompatActivity() {
             .setQuery(
                 Firebase.firestore.collection("videos")
                     .whereEqualTo("uploaderId",profileUserId)
-                    .orderBy("createdTime",Query.Direction.DES)
-            )
+                    .orderBy("createdTime", Query.Direction.DESCENDING),
+                VideoModel::class.java
+            ).build()
+        adapter = ProfileVideoAdapter(options) //弄一个option(塞了query和model)
+        binding.recyclerView.layoutManager = GridLayoutManager(this,3)
+        binding.recyclerView.adapter = adapter
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening() //确保视图数据和数据库数据绑定, 不设置的话数据库改变视图可能不会改变(firebase)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter.stopListening()
     }
 
 }

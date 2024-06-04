@@ -1,10 +1,13 @@
 package com.example.miniclip.adapter
 
+
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.bumptech.glide.Glide
+import com.example.miniclip.SingleVideoPlayerActivity
 import com.example.miniclip.databinding.ProfileVideoItemRowBinding
 import com.example.miniclip.model.VideoModel
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -20,6 +23,11 @@ class ProfileVideoAdapter(options: FirestoreRecyclerOptions<VideoModel>) //adapt
             Glide.with(binding.thumbnailImageView) //放置视频的图片
                 .load(video.url)
                 .into(binding.thumbnailImageView)
+            binding.thumbnailImageView.setOnClickListener{
+                val intent = Intent(binding.thumbnailImageView.context,SingleVideoPlayerActivity::class.java)
+                intent.putExtra("videoId",video.videoId)
+                binding.thumbnailImageView.context.startActivity(intent)
+            }
         }
     }
 
